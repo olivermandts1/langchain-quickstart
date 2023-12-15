@@ -25,8 +25,9 @@ with st.form('my_form'):
     'OpenAI Model',
     ('gpt-3.5-turbo', 'gpt-4'))
     
-    text1 = st.text_area('Enter text:', 'Write me 1 short headline marketing SUV deals')
-    text2 = st.text_area('Does this even work?')
+    systemPrompt = st.text_area('System Prompt:')
+    userPrompt = st.text_area('User Prompt')
+    assistantPrompt = st.text_area('Assistant Prompt')
     submitted = st.form_submit_button('Submit')
 
     if submitted:
