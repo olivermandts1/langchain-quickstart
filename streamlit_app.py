@@ -10,7 +10,7 @@ st.caption('Create prompt chains that take outputs from one prompt to be used as
 openai_api_key = st.sidebar.text_input('OpenAI API Key')
 
 # Function to generate response using OpenAI API
-def generate_response(system_prompt, user_prompt, model="gpt-3.5-turbo", temperature=0):
+def generate_response(system_prompt, user_prompt, model="gpt-3.5-turbo", temperature):
     client = OpenAI(api_key=openai_api_key)
 
     response = client.chat.completions.create(
@@ -30,7 +30,7 @@ with st.form('my_form'):
     model = st.selectbox('OpenAI Model', ('gpt-3.5-turbo', 'gpt-4'))
 
     # Temperature setting
-    temperature = st.number_input('Temperature', min_value=0.0, max_value=1.0, value=0.7)
+    temperature = st.number_input('Temperature', min_value=0.0, max_value=1.0, value=0)
 
     # Text inputs for system, user, and assistant prompts
     system_prompt = st.text_area('System Prompt:', value="You are an AI assistant.")
