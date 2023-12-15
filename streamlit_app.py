@@ -4,7 +4,18 @@ from openai import OpenAI
 # Set up the Streamlit page
 st.set_page_config(page_title="🦜🔗 Prompt Chaining Sandbox")
 st.title('🔗 Prompt Chaining Sandbox')
-st.caption('Create prompt chains that take outputs from one prompt to be used as inputs for another prompt')
+st.subheader('Create prompt chains that take outputs from one prompt to be used as inputs for another prompt')
+
+# Instructions text box
+instructions = """
+    **Instructions:**
+    Use the `[output #]` dynamic replacement to reference the outputs from any previous prompts in your new prompt.
+
+    **Example:** 
+    - Prompt 1 output was ‘Best SUV Deals’
+    - In prompt 2, the dynamic replacement `[Output 1]` will send ‘Best SUV Deals’ where that dynamic replacement is in your second prompt.
+    """
+st.info(instructions)
 
 # User inputs their OpenAI API key in the sidebar
 openai_api_key = st.sidebar.text_input('OpenAI API Key')
