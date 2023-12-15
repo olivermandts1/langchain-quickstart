@@ -35,10 +35,9 @@ def add_prompt():
 # Button to add new prompt
 st.button('Add Prompt', on_click=add_prompt)
 
-# Create containers for each set of inputs
+# Create expanders for each set of inputs
 for i in range(st.session_state['form_count']):
-    with st.container():
-        st.markdown(f"### Chain Link {i+1}")
+    with st.expander(f"Chain Link {i+1}", expanded=True):
         model = st.selectbox('OpenAI Model', ('gpt-3.5-turbo', 'gpt-4'), key=f'model_{i}')
         temperature = st.number_input('Temperature', min_value=0.00, max_value=1.00, value=0.00, key=f'temp_{i}')
         system_prompt = st.text_area('System Prompt:', key=f'system_{i}')
