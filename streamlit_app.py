@@ -35,26 +35,26 @@ def add_prompt():
 # Button to add new prompt
 st.button('Add Prompt', on_click=add_prompt)
 
-# Create input widgets for each prompt
+# Create containers for each set of inputs
 for i in range(st.session_state['form_count']):
-    model = st.selectbox('OpenAI Model', ('gpt-3.5-turbo', 'gpt-4'), key=f'model_{i}')
-    temperature = st.number_input('Temperature', min_value=0.00, max_value=1.00, value=0.00, key=f'temp_{i}')
-    system_prompt = st.text_area('System Prompt:', key=f'system_{i}')
-    user_prompt = st.text_area('User Prompt', key=f'user_{i}')
+    with st.container():
+        st.markdown(f"### Chain Link {i+1}")
+        model = st.selectbox('OpenAI Model', ('gpt-3.5-turbo', 'gpt-4'), key=f'model_{i}')
+        temperature = st.number_input('Temperature', min_value=0.00, max_value=1.00, value=0.00, key=f'temp_{i}')
+        system_prompt = st.text_area('System Prompt:', key=f'system_{i}')
+        user_prompt = st.text_area('User Prompt', key=f'user_{i}')
 
 # Single submit button for all inputs
 if st.button('Submit All'):
     if not openai_api_key:
         st.warning('Please enter your OpenAI API key!', icon='⚠️')
     else:
-        st.session_state['responses'] = []  # Reset responses for each new submission
+        st.session_state['responses'] = []
         for i in range(st.session_state['form_count']):
-            # Replace placeholders in user prompt
             user_prompt_with_replacements = st.session_state[f'user_{i}']
             for j in range(i):
                 user_prompt_with_replacements = user_prompt_with_replacements.replace(f'[output {j+1}]', st.session_state['responses'][j])
 
-            # Generate response
             response = generate_response(st.session_state[f'system_{i}'], user_prompt_with_replacements, model, temperature)
             st.session_state['responses'].append(response)
             st.info(f"Generated Response {i+1}: " + response)
