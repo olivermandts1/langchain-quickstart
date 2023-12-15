@@ -16,7 +16,6 @@ if 'form_count' not in st.session_state:
 # Function to generate response using OpenAI API
 def generate_response(system_prompt, user_prompt, model="gpt-4", temperature=0.00):
     client = OpenAI(api_key=openai_api_key)
-
     response = client.chat.completions.create(
         model=model,
         messages=[
@@ -25,40 +24,35 @@ def generate_response(system_prompt, user_prompt, model="gpt-4", temperature=0.0
         ],
         temperature=temperature
     )
-
     return response.choices[0].message.content.strip('"')
 
-# Function to add a new prompt form
+# Function to add a new prompt
 def add_prompt():
     st.session_state['form_count'] += 1
 
-# Button to add new prompt form
+# Button to add new prompt
 st.button('Add Prompt', on_click=add_prompt)
 
-# Store the responses in a list
+# Store the responses and inputs in lists
 responses = [None] * st.session_state['form_count']
+models = [None] * st.session_state['form_count']
+temperatures = [None] * st.session_state['form_count']
+system_prompts = [None] * st.session_state['form_count']
+user_prompts = [None] * st.session_state['form_count']
 
-# Create multiple forms based on the form count
+# Create input widgets for each prompt
 for i in range(st.session_state['form_count']):
-    with st.form(key=f'form_{i}'):
-        st.write(f"Form {i+1}")
-        model = st.selectbox('OpenAI Model', ('gpt-3.5-turbo', 'gpt-4'), key=f'model_{i}')
-        temperature = st.number_input('Temperature', min_value=0.00, max_value=1.00, value=0.00, key=f'temp_{i}')
-        system_prompt = st.text_area('System Prompt:', key=f'system_{i}')
-        user_prompt = st.text_area('User Prompt', value=responses[i-1] if i > 0 else '', key=f'user_{i}')
-        # Store the index of the last form
-        last_form = i
+    models[i] = st.selectbox('OpenAI Model', ('gpt-3.5-turbo', 'gpt-4'), key=f'model_{i}')
+    temperatures[i] = st.number_input('Temperature', min_value=0.00, max_value=1.00, value=0.00, key=f'temp_{i}')
+    system_prompts[i] = st.text_area('System Prompt:', key=f'system_{i}')
+    user_prompts[i] = st.text_area('User Prompt', value=responses[i-1] if i > 0 and responses[i-1] is not None else '', key=f'user_{i}')
 
-# Submit button for all forms
-if st.form_submit_button('Submit All'):
+# Single submit button for all inputs
+if st.button('Submit All'):
     if not openai_api_key:
         st.warning('Please enter your OpenAI API key!', icon='⚠️')
     else:
-        for i in range(last_form + 1):
-            system_prompt = st.session_state[f'system_{i}']
-            user_prompt = st.session_state[f'user_{i}']
-            model = st.session_state[f'model_{i}']
-            temperature = st.session_state[f'temp_{i}']
-            response = generate_response(system_prompt, user_prompt, model, temperature)
+        for i in range(st.session_state['form_count']):
+            response = generate_response(system_prompts[i], user_prompts[i], models[i], temperatures[i])
             responses[i] = response
             st.info(f"Generated Response {i+1}: " + response)
