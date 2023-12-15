@@ -33,7 +33,7 @@ with st.form('my_form'):
     temperature = st.number_input('Temperature', min_value=0.0, max_value=1.0, value=0)
 
     # Text inputs for system, user, and assistant prompts
-    system_prompt = st.text_area('System Prompt:', value="You are an AI assistant.")
+    system_prompt = st.text_area('System Prompt:')
     user_prompt = st.text_area('User Prompt')
     
     # Form submission button
