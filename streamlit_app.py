@@ -47,7 +47,6 @@ def add_prompt():
 def remove_prompt():
     if st.session_state['form_count'] > 1:
         st.session_state['form_count'] -= 1
-        st.session_state['responses'].pop()  # Remove the last response if it exists
 
 # Buttons to add or remove a prompt
 col1, col2 = st.columns(2)
