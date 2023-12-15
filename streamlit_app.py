@@ -7,7 +7,7 @@ openai_api_key = st.sidebar.text_input('OpenAI API Key')
 
 def generate_response(input_text):
     # Specify the model name here. For example, "gpt-3.5-turbo", "text-davinci-003", etc.
-    model_name = "gpt-3.5-turbo"  # Replace with your desired model
+    model_name = "text-davinci-003"  # Replace with your desired model
 
     llm = OpenAI(temperature=0.7, openai_api_key=openai_api_key, model=model_name)
     st.info(llm(input_text))
