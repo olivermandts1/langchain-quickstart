@@ -43,8 +43,18 @@ def generate_response(system_prompt, user_prompt, model="gpt-4", temperature=0.0
 def add_prompt():
     st.session_state['form_count'] += 1
 
-# Button to add new prompt
-st.button('Add Prompt', on_click=add_prompt)
+# Function to remove the latest prompt
+def remove_prompt():
+    if st.session_state['form_count'] > 1:
+        st.session_state['form_count'] -= 1
+        st.session_state['responses'].pop()  # Remove the last response if it exists
+
+# Buttons to add or remove a prompt
+col1, col2 = st.columns(2)
+with col1:
+    st.button('Add Prompt', on_click=add_prompt)
+with col2:
+    st.button('Remove Prompt', on_click=remove_prompt)
 
 # Create expanders for each set of inputs
 for i in range(st.session_state['form_count']):
