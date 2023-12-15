@@ -10,7 +10,7 @@ st.caption('Create prompt chains that take outputs from one prompt to be used as
 openai_api_key = st.sidebar.text_input('OpenAI API Key')
 
 # Function to generate response using OpenAI API
-def generate_response(system_prompt, user_prompt, model="gpt-3.5-turbo", temperature):
+def generate_response(system_prompt, user_prompt, model="gpt-3.5-turbo", temperature=0):
     client = OpenAI(api_key=openai_api_key)
 
     response = client.chat.completions.create(
