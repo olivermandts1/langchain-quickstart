@@ -21,6 +21,10 @@ def generate_response(input_text, model="gpt-3.5-turbo"):
     return response.choices[0].message.content.strip('"')
 
 with st.form('my_form'):
+    option = st.selectbox(
+    'OpenAI Model',
+    ('gpt-3.5-turbo', 'gpt-4'))
+    
     text1 = st.text_area('Enter text:', 'Write me 1 short headline marketing SUV deals')
     text2 = st.text_area('Does this even work?')
     submitted = st.form_submit_button('Submit')
