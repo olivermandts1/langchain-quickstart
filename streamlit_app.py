@@ -1,9 +1,9 @@
 import streamlit as st
 from openai import OpenAI
 
-st.set_page_config(page_title="🦜🔗 Quickstart App")
-st.title('🦜🔗 Quickstart App')
-st.header('Testing for formatating?')
+st.set_page_config(page_title="🦜🔗 Prompt Chaining Sandbox")
+st.title('🔗 Prompt Chaining Sandbox')
+st.caption('Create prompt chains that take outputs from 1 prompt to be used as inputs for another prompt')
 
 openai_api_key = st.sidebar.text_input('OpenAI API Key')
 
