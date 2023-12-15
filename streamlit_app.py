@@ -30,7 +30,7 @@ with st.form('my_form'):
     model = st.selectbox('OpenAI Model', ('gpt-3.5-turbo', 'gpt-4'))
 
     # Temperature setting
-    temperature = st.number_input('Temperature', min_value=0.0, max_value=1.0, value=0)
+    temperature = st.number_input('Temperature', min_value=0.0, max_value=1.0, value=0.0)
 
     # Text inputs for system, user, and assistant prompts
     system_prompt = st.text_area('System Prompt:')
