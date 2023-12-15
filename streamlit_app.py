@@ -24,6 +24,8 @@ with st.form('my_form'):
     option = st.selectbox(
     'OpenAI Model',
     ('gpt-3.5-turbo', 'gpt-4'))
+
+    temperature = st.number_input('Temperature')
     
     systemPrompt = st.text_area('System Prompt:')
     userPrompt = st.text_area('User Prompt')
