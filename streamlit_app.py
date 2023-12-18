@@ -18,7 +18,7 @@ instructions = """
 st.info(instructions)
 
 # User inputs their OpenAI API key in the sidebar
-openai_api_key = st.sidebar.text_input('OpenAI API Key')
+openai_api_key = st.secrets["openai_secret"]
 
 # Initialize or update the session state for form count and responses
 if 'form_count' not in st.session_state:
