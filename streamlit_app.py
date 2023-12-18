@@ -81,5 +81,5 @@ if st.button('Submit All'):
             # Pass the specific model and temperature for each form
             response = generate_response(st.session_state[f'system_{i}'], user_prompt_with_replacements, current_model, current_temperature)
             st.session_state['responses'].append(response)
-            st.markdown(f"**Generated Response {i+1}:** \n\n{response}")
+            st.text(f"**Generated Response {i+1}:** \n\n{response}")
             
