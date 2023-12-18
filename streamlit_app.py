@@ -1,5 +1,7 @@
 import streamlit as st
 from openai import OpenAI
+import logging
+import pandas as pd
 
 # Set up the Streamlit page
 st.set_page_config(page_title="🦜🔗 Prompt Chaining Sandbox")
@@ -26,6 +28,9 @@ if 'form_count' not in st.session_state:
 if 'responses' not in st.session_state:
     st.session_state['responses'] = []
 
+# Setup logging
+logging.basicConfig(filename='prompt_chain_log.txt', level=logging.INFO, format='%(asctime)s - %(message)s')
+
 # Function to generate response using OpenAI API
 def generate_response(system_prompt, user_prompt, model="gpt-4", temperature=0.00):
     client = OpenAI(api_key=openai_api_key)
@@ -38,6 +43,28 @@ def generate_response(system_prompt, user_prompt, model="gpt-4", temperature=0.0
         temperature=temperature
     )
     return response.choices[0].message.content.strip('"')
+
+# Function to log form data and responses
+def log_data(form_data, responses):
+    for i, data in enumerate(form_data):
+        logging.info(f"Form {i+1}: Model: {data['model']}, Temperature: {data['temperature']}, System Prompt: {data['system_prompt']}, User Prompt: {data['user_prompt']}, Response: {responses[i]}")
+
+# Function to read log and convert to DataFrame
+def read_log_to_df():
+    with open('prompt_chain_log.txt', 'r') as file:
+        lines = file.readlines()
+
+    log_data = []
+    for line in lines:
+        timestamp, info = line.split(' - ')
+        form_number, details = info.split(': ', 1)
+        form_data = {'timestamp': timestamp, 'form_number': form_number}
+        for item in details.split(', '):
+            key, value = item.split(': ', 1)
+            form_data[key.strip()] = value.strip()
+        log_data.append(form_data)
+
+    return pd.DataFrame(log_data)
 
 # Function to add a new prompt
 def add_prompt():
@@ -69,8 +96,9 @@ if st.button('Submit All'):
         st.warning('Please enter your OpenAI API key!', icon='⚠️')
     else:
         st.session_state['responses'] = []
+        form_data = []  # Collect form data for logging
+
         for i in range(st.session_state['form_count']):
-            # Retrieve the model and temperature specific to each form
             current_model = st.session_state[f'model_{i}']
             current_temperature = st.session_state[f'temp_{i}']
 
@@ -78,7 +106,23 @@ if st.button('Submit All'):
             for j in range(i):
                 user_prompt_with_replacements = user_prompt_with_replacements.replace(f'[output {j+1}]', st.session_state['responses'][j])
 
-            # Pass the specific model and temperature for each form
             response = generate_response(st.session_state[f'system_{i}'], user_prompt_with_replacements, current_model, current_temperature)
             st.session_state['responses'].append(response)
             st.markdown(f"**Generated Response {i+1}:** \n\n{response}")
+
+            form_data.append({
+                'model': current_model,
+                'temperature': current_temperature,
+                'system_prompt': st.session_state[f'system_{i}'],
+                'user_prompt': user_prompt_with_replacements
+            })
+
+        # Log the data
+        log_data(form_data, st.session_state['responses'])
+
+# Sidebar for logs
+with st.sidebar:
+    st.header("Logs")
+    if st.button('Load Log'):
+        log_df = read_log_to_df()
+        st.dataframe(log_df)
