@@ -70,10 +70,15 @@ if st.button('Submit All'):
     else:
         st.session_state['responses'] = []
         for i in range(st.session_state['form_count']):
+            # Retrieve the model and temperature specific to each form
+            current_model = st.session_state[f'model_{i}']
+            current_temperature = st.session_state[f'temp_{i}']
+
             user_prompt_with_replacements = st.session_state[f'user_{i}']
             for j in range(i):
                 user_prompt_with_replacements = user_prompt_with_replacements.replace(f'[output {j+1}]', st.session_state['responses'][j])
 
-            response = generate_response(st.session_state[f'system_{i}'], user_prompt_with_replacements, model, temperature)
+            # Pass the specific model and temperature for each form
+            response = generate_response(st.session_state[f'system_{i}'], user_prompt_with_replacements, current_model, current_temperature)
             st.session_state['responses'].append(response)
             st.markdown(f"**Generated Response {i+1}:** \n\n{response}")
