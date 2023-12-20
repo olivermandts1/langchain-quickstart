@@ -74,12 +74,18 @@ if st.button('Submit All'):
             current_model = st.session_state[f'model_{i}']
             current_temperature = st.session_state[f'temp_{i}']
 
-            user_prompt_with_replacements = st.session_state[f'user_{i}']
+            # Get the current system and user prompts
+            current_system_prompt = st.session_state[f'system_{i}']
+            current_user_prompt = st.session_state[f'user_{i}']
+
+            # Apply dynamic replacements to both system and user prompts
             for j in range(i):
-                user_prompt_with_replacements = user_prompt_with_replacements.replace(f'[output {j+1}]', st.session_state['responses'][j])
+                replacement_text = st.session_state['responses'][j]
+                current_system_prompt = current_system_prompt.replace(f'[output {j+1}]', replacement_text)
+                current_user_prompt = current_user_prompt.replace(f'[output {j+1}]', replacement_text)
 
             # Pass the specific model and temperature for each form
-            response = generate_response(st.session_state[f'system_{i}'], user_prompt_with_replacements, current_model, current_temperature)
+            response = generate_response(current_system_prompt, current_user_prompt, current_model, current_temperature)
             st.session_state['responses'].append(response)
             st.text(f"**Generated Response {i+1}:** \n\n{response}")
             
