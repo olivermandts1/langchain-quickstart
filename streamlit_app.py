@@ -34,7 +34,8 @@ def generate_response(system_prompt, user_prompt, model="gpt-4", temperature=0.0
     model_id = {
         'gpt-3.5-turbo': 'gpt-3.5-turbo',
         'gpt-4': 'gpt-4',
-        'gpt-3.5-turbo-asset-templatization-model-1': 'ft:gpt-3.5-turbo-1106:personal::8ceweUNE'
+        'gpt-3.5-turbo-asset-templatization-model-1': 'ft:gpt-3.5-turbo-1106:personal::8ceweUNE',
+        'gpt-3.5-turbo-asset-templatization-model-2' : 'ft:gpt-3.5-turbo-1106:personal::8ch5oXdo'
     }.get(model, model)  # Default to the provided model name if it's not in the dictionary
 
     response = client.chat.completions.create(
@@ -67,7 +68,7 @@ with col2:
 for i in range(st.session_state['form_count']):
     with st.expander(f"Chain Link {i+1}", expanded=False):
         model = st.selectbox('OpenAI Model', 
-                             ('gpt-3.5-turbo', 'gpt-4', 'gpt-3.5-turbo-asset-templatization-model-1'), 
+                             ('gpt-3.5-turbo', 'gpt-4', 'gpt-3.5-turbo-asset-templatization-model-1','gpt-3.5-turbo-asset-templatization-model-2'), 
                              key=f'model_{i}')
         temperature = st.number_input('Temperature', min_value=0.00, max_value=1.00, value=0.00, key=f'temp_{i}')
         system_prompt = st.text_area('System Prompt:', key=f'system_{i}')
