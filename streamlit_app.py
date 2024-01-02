@@ -29,8 +29,16 @@ if 'responses' not in st.session_state:
 # Function to generate response using OpenAI API
 def generate_response(system_prompt, user_prompt, model="gpt-4", temperature=0.00):
     client = OpenAI(api_key=openai_api_key)
+
+    # Map the friendly model name to the actual model ID
+    model_id = {
+        'gpt-3.5-turbo': 'gpt-3.5-turbo',
+        'gpt-4': 'gpt-4',
+        'gpt-3.5-turbo-asset-templatization-model': 'ft:gpt-3.5-turbo-1106:personal::8ceweUNE'
+    }.get(model, model)  # Default to the provided model name if it's not in the dictionary
+
     response = client.chat.completions.create(
-        model=model,
+        model=model_id,
         messages=[
             {"role": "system", "content": system_prompt},
             {"role": "user", "content": user_prompt}
@@ -58,7 +66,9 @@ with col2:
 # Create expanders for each set of inputs
 for i in range(st.session_state['form_count']):
     with st.expander(f"Chain Link {i+1}", expanded=False):
-        model = st.selectbox('OpenAI Model', ('gpt-3.5-turbo', 'gpt-4'), key=f'model_{i}')
+        model = st.selectbox('OpenAI Model', 
+                             ('gpt-3.5-turbo', 'gpt-4', 'gpt-3.5-turbo-asset-templatization-model'), 
+                             key=f'model_{i}')
         temperature = st.number_input('Temperature', min_value=0.00, max_value=1.00, value=0.00, key=f'temp_{i}')
         system_prompt = st.text_area('System Prompt:', key=f'system_{i}')
         user_prompt = st.text_area('User Prompt', key=f'user_{i}')
@@ -88,4 +98,3 @@ if st.button('Submit All'):
             response = generate_response(current_system_prompt, current_user_prompt, current_model, current_temperature)
             st.session_state['responses'].append(response)
             st.text(f"**Generated Response {i+1}:** \n\n{response}")
-            
