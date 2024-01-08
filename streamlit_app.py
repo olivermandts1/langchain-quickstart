@@ -37,8 +37,8 @@ def generate_response(system_prompt, user_prompt, model="gpt-4", temperature=0.0
         'gpt-3.5-turbo-asset-templatization-model-1': 'ft:gpt-3.5-turbo-1106:personal::8ceweUNE',
         'gpt-3.5-turbo-asset-templatization-model-2' : 'ft:gpt-3.5-turbo-1106:personal::8ch5oXdo',
         'gpt-3.5-turbo-asset-templatization-model-3' : 'ft:gpt-3.5-turbo-1106:personal::8dNEkYP7',
-        'gpt-3.5-turbo-asset-templatization-model-4' : 'ft:gpt-3.5-turbo-1106:personal::8epdhWtH',
-        'gpt-3.5-turbo-angle-classification-model-1' : 'ft:gpt-3.5-turbo-1106:personal::8epn5CVM'
+        'gpt-3.5-turbo-asset-templatization-model-4' : 'ft:gpt-3.5-turbo-1106:personal::8epn5CVM',
+        'gpt-3.5-turbo-angle-classification-model-1' : 'ft:gpt-3.5-turbo-1106:personal::8epdhWtH'
     }.get(model, model)  # Default to the provided model name if it's not in the dictionary
 
     response = client.chat.completions.create(
