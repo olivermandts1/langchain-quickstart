@@ -2,21 +2,23 @@ import streamlit as st
 import pandas as pd
 from openai import OpenAI
 
-# Set up the Streamlit page
-st.set_page_config(page_title="🦜🔗 Prompt Chaining Sandbox")
-st.title('🔗 Prompt Chaining Sandbox')
-st.subheader('Create prompt chains that take outputs from one prompt to be used as inputs for another prompt')
+# Sidebar for navigation
+tab = st.sidebar.radio("Navigate", ['Prompt Chaining Sandbox', 'Editable DataFrame'])
 
-# Instructions text box
-instructions = """
-    **Instructions:**
-    Use the `[output #]` dynamic replacement to reference the outputs from any previous prompts in your new prompt.
+if tab == 'Prompt Chaining Sandbox':
+    # Place the code related to the Prompt Chaining Sandbox here
+    st.subheader('Create prompt chains that take outputs from one prompt to be used as inputs for another prompt')
 
-    **Example:** 
-    - Prompt 1 output was ‘Best SUV Deals’
-    - In prompt 2, the dynamic replacement `[Output 1]` will send ‘Best SUV Deals’ where that dynamic replacement is in your second prompt.
-    """
-st.info(instructions)
+    # Instructions text box
+    instructions = """
+        **Instructions:**
+        Use the `[output #]` dynamic replacement to reference the outputs from any previous prompts in your new prompt.
+
+        **Example:** 
+        - Prompt 1 output was ‘Best SUV Deals’
+        - In prompt 2, the dynamic replacement `[Output 1]` will send ‘Best SUV Deals’ where that dynamic replacement is in your second prompt.
+        """
+    st.info(instructions)
 
 # User inputs their OpenAI API key in the sidebar
 openai_api_key = st.secrets["openai_secret"]
@@ -103,35 +105,27 @@ if st.button('Submit All'):
             response = generate_response(current_system_prompt, current_user_prompt, current_model, current_temperature)
             st.session_state['responses'].append(response)
             st.text(f"**Generated Response {i+1}:** \n\n{response}")
-
 elif tab == 'Editable DataFrame':
-    # All the editable DataFrame code goes here
-
+    # Place the code related to the Editable DataFrame here
     st.subheader("📊 Editable DataFrame Section")
 
     # Function to create a blank DataFrame with predefined columns
     def create_blank_dataframe():
-        # Define the columns of your DataFrame here
         columns = ['Column 1', 'Column 2', 'Column 3']
         return pd.DataFrame(columns=columns)
 
-    # Initialize or update the session state for the DataFrame
     if 'editable_df' not in st.session_state:
         st.session_state['editable_df'] = create_blank_dataframe()
 
-    # Display the DataFrame
     st.write("Editable DataFrame:")
     df_display = st.dataframe(st.session_state['editable_df'])
 
-    # Function to add a new row to the DataFrame
     def add_row():
         st.session_state['editable_df'].loc[len(st.session_state['editable_df'])] = ["" for _ in st.session_state['editable_df'].columns]
 
-    # Button to add a new row
     if st.button('Add New Row'):
         add_row()
 
-    # Save button
     if st.button('Save Changes'):
-        # Here, add your code to save changes to the source
+        # Add your code to save changes
         st.success('Changes saved successfully!')
