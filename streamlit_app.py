@@ -2,7 +2,6 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 from openai import OpenAI
-from streamlit_gsheets import GSheetsConnection
 
 
 
@@ -111,29 +110,31 @@ if tab == 'Prompt Chaining Sandbox':
                 st.session_state['responses'].append(response)
                 st.text(f"**Generated Response {i+1}:** \n\n{response}")
 
-elif tab == 'Editable DataFrame':
-    # Editable DataFrame Section using st.data_editor
-    st.subheader("📥 Clipboard")
-    st.caption("This is a demo of the `st.data_editor`.")
-
-    # Create an empty grid
-    empty_grid = pd.DataFrame(np.zeros((20, 4))).replace(0, "").astype(str)
-
-    # Use st.data_editor for an editable DataFrame
-    df = st.data_editor(empty_grid, use_container_width=True, height=600)
-
 elif tab == 'Google Sheets Connection':
-    st.subheader('Google Sheets Connection')
+    st.subheader("📗 Google Sheets st.connection using Public URLs")
 
-    # Create a connection object
-    conn = st.connection("gsheets", type=GSheetsConnection, worksheet="Content Generation")
+    url = "https://docs.google.com/spreadsheets/d/1JDy9md2VZPz4JbYtRPJLs81_3jUK47nx6GYQjgU8qNY/edit?usp=sharing"
 
-    # Read data from the specific cell
-    df = conn.read(range="A2:A2")
+    st.write("#### 1. Read public Google Worksheet as Pandas")
 
-    # Display the content of cell A2
-    if not df.empty:
-        cell_content = df.iat[0, 0]
-        st.write(f"Content in cell A2: {cell_content}")
-    else:
-        st.error("Unable to read the content from the Google Sheet.")
+    with st.echo():
+        conn = st.experimental_connection("gsheets", type=GSheetsConnection)
+        df = conn.read(spreadsheet=url, usecols=[0, 1])
+        st.dataframe(df)
+
+    st.write("#### 2. Query public Google Worksheet using SQL")
+    st.info(
+        "Mutation SQL queries are in-memory only and do not results in the Worksheet update.",
+        icon="ℹ️",
+    )
+    st.warning(
+        """You can query only one Worksheet in provided public Spreadsheet,
+            use Worksheet name as target in from SQL queries.
+            The worksheet, which you query is defined by GID query parameter or GID parameters to query method.""",
+        icon="⚠️",
+    )
+
+    with st.echo():
+        conn = st.experimental_connection("gsheets", type=GSheetsConnection)
+        df = conn.query('select births from "Example 2" limit 10', spreadsheet=url)
+        st.dataframe(df)
