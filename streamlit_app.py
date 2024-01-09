@@ -106,22 +106,22 @@ if tab == 'Prompt Chaining Sandbox':
                 st.session_state['responses'].append(response)
                 st.text(f"**Generated Response {i+1}:** \n\n{response}")
 elif tab == 'Editable DataFrame':
-    # Place the code related to the Editable DataFrame here
+    # Editable DataFrame Section
     st.subheader("📊 Editable DataFrame Section")
 
-    # Initialize the DataFrame
-    if 'editable_df' not in st.session_state:
-        st.session_state['editable_df'] = pd.DataFrame(columns=['Column 1', 'Column 2', 'Column 3'])
+    # Sample data for the editable DataFrame
+    df = pd.DataFrame(
+        [
+            {"command": "st.selectbox", "rating": 4, "is_widget": True},
+            {"command": "st.balloons", "rating": 5, "is_widget": False},
+            {"command": "st.time_input", "rating": 3, "is_widget": True},
+        ]
+    )
 
-    # Display the editable DataFrame
-    edited_df = st.data_editor("Editable DataFrame", st.session_state['editable_df'], num_rows="dynamic")
+    # Use st.data_editor for an editable DataFrame
+    edited_df = st.data_editor("Editable DataFrame", df, num_rows="dynamic")
 
-    # Show the user's favorite command based on highest rating
+    # Display the user's favorite command based on the highest rating
     if len(edited_df) > 0 and "rating" in edited_df.columns:
         favorite_command = edited_df.loc[edited_df["rating"].idxmax()]["command"]
         st.markdown(f"Your favorite command is **{favorite_command}** 🎈")
-
-    # Button to save changes
-    if st.button('Save Changes'):
-        st.session_state['editable_df'] = edited_df
-        st.success('Changes saved successfully!')
