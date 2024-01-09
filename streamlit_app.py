@@ -104,23 +104,32 @@ if st.button('Submit All'):
             st.session_state['responses'].append(response)
             st.text(f"**Generated Response {i+1}:** \n\n{response}")
 
-# Example function to load a DataFrame (modify as per your data source)
-def load_data():
-    # For example, loading from a CSV file
-    return pd.read_csv('your_data_file.csv')
+# Function to create a blank DataFrame with predefined columns
+def create_blank_dataframe():
+    # Define the columns of your DataFrame here
+    columns = ['Column 1', 'Column 2', 'Column 3']
+    return pd.DataFrame(columns=columns)
 
-# Function to display and edit DataFrame
-def edit_dataframe(df):
-    # Display the DataFrame
-    st.write("Editable DataFrame:")
-    edited_df = st.dataframe(df)
-
-    # Add a save button
-    if st.button('Save Changes'):
-        # Here, add your code to save changes to the source
-        st.success('Changes saved successfully!')
-
-# Creating a section in the app for the DataFrame
+# Editable DataFrame Section
 st.header("📊 Editable DataFrame Section")
-df = load_data()
-edit_dataframe(df)
+
+# Initialize or update the session state for the DataFrame
+if 'editable_df' not in st.session_state:
+    st.session_state['editable_df'] = create_blank_dataframe()
+
+# Display the DataFrame
+st.write("Editable DataFrame:")
+df_display = st.dataframe(st.session_state['editable_df'])
+
+# Function to add a new row to the DataFrame
+def add_row():
+    st.session_state['editable_df'].loc[len(st.session_state['editable_df'])] = ["" for _ in st.session_state['editable_df'].columns]
+
+# Button to add a new row
+if st.button('Add New Row'):
+    add_row()
+
+# Save button
+if st.button('Save Changes'):
+    # Here, add your code to save changes to the source
+    st.success('Changes saved successfully!')
