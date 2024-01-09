@@ -109,23 +109,19 @@ elif tab == 'Editable DataFrame':
     # Place the code related to the Editable DataFrame here
     st.subheader("📊 Editable DataFrame Section")
 
-    # Function to create a blank DataFrame with predefined columns
-    def create_blank_dataframe():
-        columns = ['Column 1', 'Column 2', 'Column 3']
-        return pd.DataFrame(columns=columns)
-
+    # Initialize the DataFrame
     if 'editable_df' not in st.session_state:
-        st.session_state['editable_df'] = create_blank_dataframe()
+        st.session_state['editable_df'] = pd.DataFrame(columns=['Column 1', 'Column 2', 'Column 3'])
 
-    st.write("Editable DataFrame:")
-    df_display = st.dataframe(st.session_state['editable_df'])
+    # Display the editable DataFrame
+    edited_df = st.data_editor("Editable DataFrame", st.session_state['editable_df'], num_rows="dynamic")
 
-    def add_row():
-        st.session_state['editable_df'].loc[len(st.session_state['editable_df'])] = ["" for _ in st.session_state['editable_df'].columns]
+    # Show the user's favorite command based on highest rating
+    if len(edited_df) > 0 and "rating" in edited_df.columns:
+        favorite_command = edited_df.loc[edited_df["rating"].idxmax()]["command"]
+        st.markdown(f"Your favorite command is **{favorite_command}** 🎈")
 
-    if st.button('Add New Row'):
-        add_row()
-
+    # Button to save changes
     if st.button('Save Changes'):
-        # Add your code to save changes
+        st.session_state['editable_df'] = edited_df
         st.success('Changes saved successfully!')
