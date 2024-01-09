@@ -104,32 +104,34 @@ if st.button('Submit All'):
             st.session_state['responses'].append(response)
             st.text(f"**Generated Response {i+1}:** \n\n{response}")
 
-# Function to create a blank DataFrame with predefined columns
-def create_blank_dataframe():
-    # Define the columns of your DataFrame here
-    columns = ['Column 1', 'Column 2', 'Column 3']
-    return pd.DataFrame(columns=columns)
+elif tab == 'Editable DataFrame':
+    # All the editable DataFrame code goes here
 
-# Editable DataFrame Section
-st.header("📊 Editable DataFrame Section")
+    st.subheader("📊 Editable DataFrame Section")
 
-# Initialize or update the session state for the DataFrame
-if 'editable_df' not in st.session_state:
-    st.session_state['editable_df'] = create_blank_dataframe()
+    # Function to create a blank DataFrame with predefined columns
+    def create_blank_dataframe():
+        # Define the columns of your DataFrame here
+        columns = ['Column 1', 'Column 2', 'Column 3']
+        return pd.DataFrame(columns=columns)
 
-# Display the DataFrame
-st.write("Editable DataFrame:")
-df_display = st.dataframe(st.session_state['editable_df'])
+    # Initialize or update the session state for the DataFrame
+    if 'editable_df' not in st.session_state:
+        st.session_state['editable_df'] = create_blank_dataframe()
 
-# Function to add a new row to the DataFrame
-def add_row():
-    st.session_state['editable_df'].loc[len(st.session_state['editable_df'])] = ["" for _ in st.session_state['editable_df'].columns]
+    # Display the DataFrame
+    st.write("Editable DataFrame:")
+    df_display = st.dataframe(st.session_state['editable_df'])
 
-# Button to add a new row
-if st.button('Add New Row'):
-    add_row()
+    # Function to add a new row to the DataFrame
+    def add_row():
+        st.session_state['editable_df'].loc[len(st.session_state['editable_df'])] = ["" for _ in st.session_state['editable_df'].columns]
 
-# Save button
-if st.button('Save Changes'):
-    # Here, add your code to save changes to the source
-    st.success('Changes saved successfully!')
+    # Button to add a new row
+    if st.button('Add New Row'):
+        add_row()
+
+    # Save button
+    if st.button('Save Changes'):
+        # Here, add your code to save changes to the source
+        st.success('Changes saved successfully!')
