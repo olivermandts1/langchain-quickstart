@@ -109,7 +109,34 @@ if tab == 'Prompt Chaining Sandbox':
                 st.session_state['responses'].append(response)
                 st.text(f"**Generated Response {i+1}:** \n\n{response}")
 
+elif tab == 'Editable DataFrame':
+    # Place the code related to the Editable DataFrame here
+    st.subheader("📊 Editable DataFrame Section")
+
+    # Function to create a blank DataFrame with predefined columns
+    def create_blank_dataframe():
+        columns = ['Column 1', 'Column 2', 'Column 3']
+        return pd.DataFrame(columns=columns)
+
+    if 'editable_df' not in st.session_state:
+        st.session_state['editable_df'] = create_blank_dataframe()
+
+    st.write("Editable DataFrame:")
+    df_display = st.dataframe(st.session_state['editable_df'])
+
+    def add_row():
+        st.session_state['editable_df'].loc[len(st.session_state['editable_df'])] = ["" for _ in st.session_state['editable_df'].columns]
+
+    if st.button('Add New Row'):
+        add_row()
+
+    if st.button('Save Changes'):
+        # Add your code to save changes
+        st.success('Changes saved successfully!')
+
+
 elif tab == 'Google Sheets Connection':
+    from streamlit_gsheets import GSheetsConnection
     st.subheader('Google Sheets Connection')
 
     # Create a connection object
