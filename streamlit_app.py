@@ -2,9 +2,12 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 from openai import OpenAI
+from streamlit_gsheets import GSheetsConnection
+
 
 # Sidebar for navigation
-tab = st.sidebar.radio("Navigate", ['Prompt Chaining Sandbox', 'Editable DataFrame'])
+tab = st.sidebar.radio("Navigate", ['Prompt Chaining Sandbox', 'Editable DataFrame', 'Google Sheets Connection'])
+
 
 if tab == 'Prompt Chaining Sandbox':
     # Place the code related to the Prompt Chaining Sandbox here
@@ -117,3 +120,19 @@ elif tab == 'Editable DataFrame':
 
     # Use st.data_editor for an editable DataFrame
     df = st.data_editor(empty_grid, use_container_width=True, height=600)
+
+elif tab == 'Google Sheets Connection':
+    st.subheader('Google Sheets Connection')
+
+    # Create a connection object
+    conn = st.connection("gsheets", type=GSheetsConnection, worksheet="Content Generation")
+
+    # Read data from the specific cell
+    df = conn.read(range="A2:A2")
+
+    # Display the content of cell A2
+    if not df.empty:
+        cell_content = df.iat[0, 0]
+        st.write(f"Content in cell A2: {cell_content}")
+    else:
+        st.error("Unable to read the content from the Google Sheet.")
