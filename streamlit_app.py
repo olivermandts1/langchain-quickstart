@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import numpy as np
 from openai import OpenAI
 
 # Sidebar for navigation
@@ -105,23 +106,14 @@ if tab == 'Prompt Chaining Sandbox':
                 response = generate_response(current_system_prompt, current_user_prompt, current_model, current_temperature)
                 st.session_state['responses'].append(response)
                 st.text(f"**Generated Response {i+1}:** \n\n{response}")
-elif tab == 'Editable DataFrame':
-    # Editable DataFrame Section
-    st.subheader("📊 Editable DataFrame Section")
 
-    # Sample data for the editable DataFrame
-    df = pd.DataFrame(
-        [
-            {"command": "st.selectbox", "rating": 4, "is_widget": True},
-            {"command": "st.balloons", "rating": 5, "is_widget": False},
-            {"command": "st.time_input", "rating": 3, "is_widget": True},
-        ]
-    )
+elif tab == 'Editable DataFrame':
+    # Editable DataFrame Section using st.data_editor
+    st.subheader("📥 Clipboard")
+    st.caption("This is a demo of the `st.data_editor`.")
+
+    # Create an empty grid
+    empty_grid = pd.DataFrame(np.zeros((20, 4))).replace(0, "").astype(str)
 
     # Use st.data_editor for an editable DataFrame
-    edited_df = st.data_editor("Editable DataFrame", df, num_rows="dynamic")
-
-    # Display the user's favorite command based on the highest rating
-    if len(edited_df) > 0 and "rating" in edited_df.columns:
-        favorite_command = edited_df.loc[edited_df["rating"].idxmax()]["command"]
-        st.markdown(f"Your favorite command is **{favorite_command}** 🎈")
+    df = st.data_editor(empty_grid, use_container_width=True, height=600)
