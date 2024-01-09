@@ -110,7 +110,6 @@ if tab == 'Prompt Chaining Sandbox':
                 st.text(f"**Generated Response {i+1}:** \n\n{response}")
 
 elif tab == 'Google Sheets Connection':
-    from streamlit_gsheets import GSheetsConnection 
     st.subheader('Google Sheets Connection')
 
     # Create a connection object
