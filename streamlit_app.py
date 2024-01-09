@@ -1,4 +1,5 @@
 import streamlit as st
+import pandas as pd
 from openai import OpenAI
 
 # Set up the Streamlit page
@@ -102,3 +103,24 @@ if st.button('Submit All'):
             response = generate_response(current_system_prompt, current_user_prompt, current_model, current_temperature)
             st.session_state['responses'].append(response)
             st.text(f"**Generated Response {i+1}:** \n\n{response}")
+
+# Example function to load a DataFrame (modify as per your data source)
+def load_data():
+    # For example, loading from a CSV file
+    return pd.read_csv('your_data_file.csv')
+
+# Function to display and edit DataFrame
+def edit_dataframe(df):
+    # Display the DataFrame
+    st.write("Editable DataFrame:")
+    edited_df = st.dataframe(df)
+
+    # Add a save button
+    if st.button('Save Changes'):
+        # Here, add your code to save changes to the source
+        st.success('Changes saved successfully!')
+
+# Creating a section in the app for the DataFrame
+st.header("📊 Editable DataFrame Section")
+df = load_data()
+edit_dataframe(df)
