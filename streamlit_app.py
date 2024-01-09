@@ -108,7 +108,7 @@ if tab == 'Prompt Chaining Sandbox':
                 response = generate_response(current_system_prompt, current_user_prompt, current_model, current_temperature)
                 st.session_state['responses'].append(response)
                 st.text(f"**Generated Response {i+1}:** \n\n{response}")
-                
+
 elif tab == 'Editable DataFrame':
     # Editable DataFrame Section using st.data_editor
     st.subheader("📥 Clipboard")
