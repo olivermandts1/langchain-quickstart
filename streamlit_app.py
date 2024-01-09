@@ -108,31 +108,17 @@ if tab == 'Prompt Chaining Sandbox':
                 response = generate_response(current_system_prompt, current_user_prompt, current_model, current_temperature)
                 st.session_state['responses'].append(response)
                 st.text(f"**Generated Response {i+1}:** \n\n{response}")
-
+                
 elif tab == 'Editable DataFrame':
-    # Place the code related to the Editable DataFrame here
-    st.subheader("📊 Editable DataFrame Section")
+    # Editable DataFrame Section using st.data_editor
+    st.subheader("📥 Clipboard")
+    st.caption("This is a demo of the `st.data_editor`.")
 
-    # Function to create a blank DataFrame with predefined columns
-    def create_blank_dataframe():
-        columns = ['Column 1', 'Column 2', 'Column 3']
-        return pd.DataFrame(columns=columns)
+    # Create an empty grid
+    empty_grid = pd.DataFrame(np.zeros((20, 4))).replace(0, "").astype(str)
 
-    if 'editable_df' not in st.session_state:
-        st.session_state['editable_df'] = create_blank_dataframe()
-
-    st.write("Editable DataFrame:")
-    df_display = st.dataframe(st.session_state['editable_df'])
-
-    def add_row():
-        st.session_state['editable_df'].loc[len(st.session_state['editable_df'])] = ["" for _ in st.session_state['editable_df'].columns]
-
-    if st.button('Add New Row'):
-        add_row()
-
-    if st.button('Save Changes'):
-        # Add your code to save changes
-        st.success('Changes saved successfully!')
+    # Use st.data_editor for an editable DataFrame
+    df = st.data_editor(empty_grid, use_container_width=True, height=600)
 
 
 elif tab == 'Google Sheets Connection':
