@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 from openai import OpenAI
+from streamlit_gsheets import GSheetsConnection
 
 
 # Sidebar for navigation
