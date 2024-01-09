@@ -116,11 +116,11 @@ elif tab == 'Google Sheets Connection':
     conn = st.connection("gsheets", type=GSheetsConnection, worksheet="Content Generation")
 
     # Read data from the specific cell
-    df = conn.read(range="A2:A2")
+    # Create a connection object.
+    conn = st.connection("gsheets", type=GSheetsConnection)
 
-    # Display the content of cell A2
-    if not df.empty:
-        cell_content = df.iat[0, 0]
-        st.write(f"Content in cell A2: {cell_content}")
-    else:
-        st.error("Unable to read the content from the Google Sheet.")
+    df = conn.read()
+
+    # Print results.
+    for row in df.itertuples():
+        st.write(f"{row.name} has a :{row.pet}:")
