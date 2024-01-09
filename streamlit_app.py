@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 from openai import OpenAI
-from streamlit_gsheets import GSheetsConnection 
+
 
 # Sidebar for navigation
 tab = st.sidebar.radio("Navigate", ['Prompt Chaining Sandbox', 'Editable DataFrame', 'Google Sheets Connection'])
@@ -110,12 +110,13 @@ if tab == 'Prompt Chaining Sandbox':
                 st.text(f"**Generated Response {i+1}:** \n\n{response}")
 
 elif tab == 'Google Sheets Connection':
+    from streamlit_gsheets import GSheetsConnection 
     st.subheader('Google Sheets Connection')
 
     # Create a connection object
     conn = st.connection("gsheets", type=GSheetsConnection, worksheet="Content Generation")
 
-    # Read data from the specific cell
+
     # Create a connection object.
     conn = st.connection("gsheets", type=GSheetsConnection)
 
