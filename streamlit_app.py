@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 from openai import OpenAI
+from streamlit_gsheets import GSheetsConnection
 
 
 # Sidebar for navigation
@@ -122,7 +123,6 @@ elif tab == 'Editable DataFrame':
 
 
 elif tab == 'Google Sheets Connection':
-    from streamlit_gsheets import GSheetsConnection
     st.subheader('Google Sheets Connection')
 
     # Create a connection object
